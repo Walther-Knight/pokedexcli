@@ -122,7 +122,6 @@ func main() {
 
 		command, exists := commands[commandName[0]]
 		if exists {
-			fmt.Printf("DEBUG input %s", params)
 			err := command.callback(config, cache, params)
 			if err != nil {
 				fmt.Println(err)
