@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"pokedexcli/internal/pokeapi"
 	"sort"
 	"strings"
 )
@@ -16,13 +17,13 @@ func cleanInput(text string) []string {
 	return splitString
 }
 
-func commandExit() error {
+func commandExit(config *pokeapi.Config) error {
 	fmt.Println("Closing the Pokedex... Goodbye!")
 	os.Exit(0)
 	return nil
 }
 
-func commandHelp() error {
+func commandHelp(config *pokeapi.Config) error {
 	fmt.Println("Welcome to the Pokedex!")
 	fmt.Println("Usage:")
 	fmt.Println()
@@ -39,10 +40,20 @@ func commandHelp() error {
 	return nil
 }
 
+func commandMap(config *pokeapi.Config) error {
+	pokeapi.GetNextLocation(config)
+	return nil
+}
+
+func commandMapb(config *pokeapi.Config) error {
+	pokeapi.GetPrevLocation(config)
+	return nil
+}
+
 type cliCommand struct {
 	name        string
 	description string
-	callback    func() error
+	callback    func(config *pokeapi.Config) error
 }
 
 var commands map[string]cliCommand
@@ -59,9 +70,24 @@ func init() {
 			description: "Displays a help message",
 			callback:    commandHelp,
 		},
+		"map": {
+			name:        "map",
+			description: "Get the next 20 location areas",
+			callback:    commandMap,
+		},
+		"mapb": {
+			name:        "mapb",
+			description: "Get the previous 20 location areas",
+			callback:    commandMapb,
+		},
 	}
 }
+
 func main() {
+	config := &pokeapi.Config{
+		NextUrl: "https://pokeapi.co/api/v2/location-area",
+		PrevUrl: "",
+	}
 	scanner := bufio.NewScanner(os.Stdin)
 	for {
 		fmt.Print("Pokedex > ")
@@ -75,7 +101,7 @@ func main() {
 
 		command, exists := commands[commandName[0]]
 		if exists {
-			err := command.callback()
+			err := command.callback(config)
 			if err != nil {
 				fmt.Println(err)
 			}
