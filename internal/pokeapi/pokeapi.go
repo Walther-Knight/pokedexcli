@@ -487,6 +487,7 @@ func AttemptCatch(cfg *Config, cache *pokecache.Cache, params string) error {
 	if int(chanceToCatch) <= rand.Intn(100) {
 		pokedex[pokemon.Name] = pokemon
 		fmt.Printf("%s was caught!\n", pokemon.Name)
+		fmt.Println("You may now inspect it with the inspect command.")
 	} else {
 		fmt.Printf("%s escaped!\n", pokemon.Name)
 	}
@@ -511,6 +512,13 @@ func InspectPokemon(cfg *Config, cache *pokecache.Cache, params string) error {
 			fmt.Printf("  - %s\n", typeInfo.Type.Name)
 		}
 	}
+	return nil
+}
 
+func ListPokedex(cfg *Config, cache *pokecache.Cache, params string) error {
+	fmt.Println("Your Pokedex:")
+	for key, _ := range pokedex {
+		fmt.Printf("  - %s\n", key)
+	}
 	return nil
 }

@@ -66,6 +66,11 @@ func commandInspect(config *pokeapi.Config, cache *pokecache.Cache, params strin
 	return nil
 }
 
+func commandPokedex(config *pokeapi.Config, cache *pokecache.Cache, params string) error {
+	pokeapi.ListPokedex(config, cache, params)
+	return nil
+}
+
 type cliCommand struct {
 	name        string
 	description string
@@ -112,6 +117,11 @@ func init() {
 			name:        "inspect",
 			description: "Inspect a Pokemon in Pokedex",
 			callback:    commandInspect,
+		},
+		"pokedex": {
+			name:        "pokedex",
+			description: "Show contents of Pokedex",
+			callback:    commandPokedex,
 		},
 	}
 }
