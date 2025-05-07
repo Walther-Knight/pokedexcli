@@ -492,3 +492,25 @@ func AttemptCatch(cfg *Config, cache *pokecache.Cache, params string) error {
 	}
 	return nil
 }
+
+func InspectPokemon(cfg *Config, cache *pokecache.Cache, params string) error {
+	var pokemon Pokemon
+	pokemon, found := pokedex[params]
+	if !found {
+		fmt.Println("you have not caught that pokemon")
+	} else {
+		fmt.Printf("Name: %s\n", pokemon.Name)
+		fmt.Printf("Height: %d\n", pokemon.Height)
+		fmt.Printf("Weight: %d\n", pokemon.Weight)
+		fmt.Println("Stats:")
+		for _, statInfo := range pokemon.Stats {
+			fmt.Printf("  -%s: %d\n", statInfo.Stat.Name, statInfo.BaseStat)
+		}
+		fmt.Println("Types:")
+		for _, typeInfo := range pokemon.Types {
+			fmt.Printf("  - %s\n", typeInfo.Type.Name)
+		}
+	}
+
+	return nil
+}
