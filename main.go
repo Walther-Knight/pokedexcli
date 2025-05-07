@@ -56,6 +56,11 @@ func commandExplore(config *pokeapi.Config, cache *pokecache.Cache, params strin
 	return nil
 }
 
+func commandCatch(config *pokeapi.Config, cache *pokecache.Cache, params string) error {
+	pokeapi.AttemptCatch(config, cache, params)
+	return nil
+}
+
 type cliCommand struct {
 	name        string
 	description string
@@ -92,6 +97,11 @@ func init() {
 			name:        "explore",
 			description: "Get Pokemon in location",
 			callback:    commandExplore,
+		},
+		"catch": {
+			name:        "catch",
+			description: "Try to catch a Pokemon",
+			callback:    commandCatch,
 		},
 	}
 }
